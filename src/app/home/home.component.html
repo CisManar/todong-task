@@ -1,0 +1,127 @@
+<!--
+ <p-listbox  [options]="categories" optionLabel="name"  [style]='{"width":"250px"}'  checkbox="checkbox" filter="filter"
+            >
+          </p-listbox> 
+
+
+ -->
+<div class="container-fluid">
+    <!-- categories list -->
+ <div class="col-lg-3">
+    <div class="content-section">
+       <h4 class="first">List Categories</h4>
+      <p-button label="Add Category" (click)="showCatDialog(null)" icon="pi pi-info-circle"  ></p-button> 
+      <p-button label="Edit" [disabled]="!selectedCategory" (click)="showCatDialog(selectedCategory.id)"></p-button>
+      <p-button label="Delete" [disabled]="!selectedCategory" (click)="deleteCat(selectedCategory)" styleClass="ui-button-danger"></p-button>
+  
+    <p-listbox [style]="{'width':'100%'}" [options]="categories" [(ngModel)]="selectedCategory" optionLabel="name" (onChange)="viewList(selectedCategory.id)"> 
+    </p-listbox>
+  
+    <p>Selected Category: {{selectedCategory ? selectedCategory.name : 'none'}}
+        
+      
+    </p>
+    <p-button label="Reset Category" (click)="resetCat()" styleClass="ui-button-success" ></p-button>
+  
+    <!-- <p-listbox [options]="categories" [(ngModel)]="selectedCategory" (onChange)="viewList(selectedCategory.id)">
+      <p-header>
+        <i class="fa fa-car"></i>
+        List of categories
+      </p-header>
+      <ng-template let-category let-i="index" pTemplate="item" >
+          <div class="ui-helper-clearfix">
+              
+              <span style=" margin:20px 10px 0 0" >{{category.name}}</span>
+          </div>
+      </ng-template>
+      <p-footer>
+        {{selectedCategory ? selectedCategory.name : 'none'}}
+      </p-footer>
+  </p-listbox>
+   -->
+  
+  </div>
+  
+  <!-- add category dialog -->
+  
+  <p-dialog header=" Category Form" [(visible)]="catDisplay">
+    <form [formGroup] = 'categoriesForm' (ngSubmit)="onSubmitCat()">
+      
+      <span class="ui-float-label">
+          <input id="float-input" formControlName="catName" type="text" size="30" pInputText> 
+          <label for="float-input">Category Name</label>
+      </span>
+      <p-button label="Save" icon="fa fa-check" iconPos="left"></p-button>
+    </form>
+  </p-dialog>
+   </div>
+   <!---End Categories list-->
+
+
+   
+  <!-- to do list -->
+   <div class="col-lg-9">
+    <div *ngIf="toDoArrDisplay">
+      <!-- to do tasks -->
+      <h4>Task-to-do </h4>
+      <p-button label="Addtask" (onClick)="showTaskDialog()" icon="pi pi-info-circle"></p-button>
+  
+      <hr />
+          <ul class="list-group">
+             
+              <li  *ngFor="let task of toDoArrDisplay" class="list-group-item taskToComplete"> 
+                  <span class="dateTime">{{task.dueDate |date:'MM/dd/yyyy @ h:mma'}}</span> 
+                
+                 <span class="list-group-addon pull-right  " >
+                     <button (click)="doneTask(task)" class="btn btn-xs btn-success">Done</button>
+                     <button (click)="showTaskDialog(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></button>
+                     <button (click)="deleteTask(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                 </span><br />
+               <b>  {{task.title}} </b>
+                 <p>{{task.description}}</p>
+              </li>  
+          </ul>
+          <!-- done tasks -->
+          <h4>Task-Done </h4>
+          <ul class="list-group">
+             
+              <li  *ngFor="let donetask of doneTasks" class="list-group-item taskToComplete"> 
+                
+                 <span class="list-group-addon pull-right  " >
+                     <button (click)="backToDo(donetask)" class="btn btn-xs btn-success">Back To To-Do list</button>
+                 </span><br />
+                 {{donetask.title}}
+              </li>  
+          </ul>
+   </div>  
+  <!-- add to do dialog -->
+   <p-dialog header="Task Form" [(visible)]="taskDisplay" width="500" height='700'>
+    <form [formGroup] = 'toDoListForm' (ngSubmit)="onSubmitListItem()">
+      <div class="form-group"> 
+        <span class="ui-float-label">
+            <input id="float-input" formControlName="title" type="text" size="30" pInputText> 
+            <label for="float-input">Task Title</label>
+        </span>
+      </div>
+      <div class="form-group">
+        <span class="ui-float-label">
+          <textarea  id="float-input" formControlName="description" type="text" size="30" pInputTextarea></textarea>
+          <label for="float-input">Task description</label>
+      </span>
+      </div>
+      <div class="form-group">
+          <p-calendar formControlName="dueDate" showTime="true" dateFormat="mm/yy"></p-calendar>
+      </div>
+      <div class="form-group">
+          <p-dropdown [options]="categories" formControlName="selectedCat" optionLabel="name"></p-dropdown>
+  
+      
+      </div>
+      <p-button label="Save" icon="fa fa-check" iconPos="left"></p-button>
+    </form>
+  </p-dialog>
+   </div>
+</div>
+ 
+
+
